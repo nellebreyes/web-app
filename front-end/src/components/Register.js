@@ -26,7 +26,6 @@ const Register = () => {
   };
 
   const register = (formData) => {
-    console.log(formData);
     fetch(`${process.env.REACT_APP_API_URL}/register`, {
       method: "POST",
       headers: { Accept: "application/json" },

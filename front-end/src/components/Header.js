@@ -15,9 +15,7 @@ function Header() {
         <div className="nav">
           <ul>
             <li>
-              <Link exact to="/">
-                Home
-              </Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
               <Link to="/register">Register</Link>

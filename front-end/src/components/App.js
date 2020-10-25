@@ -1,18 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Header from "./Header";
 import Home from "./Home";
+import UserProfile from "./UserProfile";
 import Register from "./Register";
+import ContextProvider from "../ContextProvider";
 
 function App() {
+  const [status, setStatus] = useState(
+    Boolean(localStorage.getItem("webappv2Token"))
+  );
+
   return (
-    <BrowserRouter>
-      <Header />
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/register" component={Register} />
-      </Switch>
-    </BrowserRouter>
+    <ContextProvider.Provider value={setStatus}>
+      <BrowserRouter>
+        <Header status={status} />
+        <Switch>
+          {status ? (
+            <Route exact path="/profile/:id">
+              {" "}
+              <UserProfile />
+            </Route>
+          ) : (
+            <Route exact path="/">
+              <Home />
+            </Route>
+          )}
+
+          <Route exact path="/register" component={Register} />
+        </Switch>
+      </BrowserRouter>
+    </ContextProvider.Provider>
   );
 }
 

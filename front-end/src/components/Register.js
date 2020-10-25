@@ -1,4 +1,3 @@
-import Axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const Register = () => {
@@ -15,7 +14,6 @@ const Register = () => {
   //destructure to grab easily
   const { formData } = values;
 
-  //this will run everytime the component mounts and the values change
   useEffect(() => {
     setValues({ ...values, formData: new FormData() });
   }, []);
@@ -57,6 +55,7 @@ const Register = () => {
           type="email"
           name="email"
           id="email"
+          autoFocus
           placeholder="Enter a valid email"
           onChange={handleChange("email")}
         />

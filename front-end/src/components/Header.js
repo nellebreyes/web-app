@@ -1,19 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import UserIsLoggedOut from "./UserIsLoggedOut";
 import UserIsLoggedIn from "./UserIsLoggedIn";
 
-function Header() {
-  const [loggedIn, setLoggedIn] = useState();
-  return (
-    <>
-      {loggedIn ? (
-        <UserIsLoggedIn />
-      ) : (
-        <UserIsLoggedOut setLoggedIn={setLoggedIn} />
-      )}
-    </>
-  );
+function Header(props) {
+  return <>{props.status ? <UserIsLoggedIn /> : <UserIsLoggedOut />}</>;
 }
 
 export default Header;

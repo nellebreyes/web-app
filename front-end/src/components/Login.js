@@ -1,35 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { withRouter } from "react-router-dom";
 import Axios from "axios";
+import ContextProvider from "../ContextProvider";
 
-const Login = () => {
+const Login = (props) => {
+  const setStatus = useContext(ContextProvider);
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
+
+  //destructure
   const { email, password } = values;
 
+  //HOF for cleaner state change handling
   const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
-
-  // const clickSubmit = (event) => {
-  //   event.preventDefault();
-  //   fetch(`${process.env.REACT_APP_API_URL}/login`, {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   })
-  //     .then(function (response) {
-  //       console.log(response);
-  //       localStorage.setItem("webAppv2Email", response.token);
-  //     })
-  //     .catch(function () {
-  //       console.log("Please try again later");
-  //     });
-  // };
 
   const clickSubmit = async (event) => {
     event.preventDefault();
@@ -39,6 +26,14 @@ const Login = () => {
         { email, password }
       );
       //console.log(response);
+      if (response.data) {
+        localStorage.setItem("webappv2Token", response.data.token);
+        localStorage.setItem("webappv2Email", response.data.email);
+        setStatus(Boolean(true));
+        props.history.push(`/profile/${response.data.id}`);
+      } else {
+        console.log("Incorrect username / password");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -52,6 +47,8 @@ const Login = () => {
           type="email"
           name="email"
           id="email"
+          autoFocus
+          placeholder="Enter a valid email"
           onChange={handleChange("email")}
         />
       </div>
@@ -76,4 +73,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);

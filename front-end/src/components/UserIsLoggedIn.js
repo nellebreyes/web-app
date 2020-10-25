@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import ContextProvider from "../ContextProvider";
 
 function UserIsLoggedIn() {
+  const setStatus = useContext(ContextProvider);
+
+  function handleLogout() {
+    setStatus(Boolean(false));
+    localStorage.removeItem("webappv2Token");
+    localStorage.removeItem("webappv2Email");
+  }
+
   return (
     <div className="header">
       <div className="header-container">
@@ -15,7 +24,9 @@ function UserIsLoggedIn() {
         <div className="nav">
           <ul>
             <li>
-              <Link to="#">Sign Out</Link>
+              <Link onClick={handleLogout} to="/">
+                Sign Out
+              </Link>
             </li>
           </ul>
         </div>

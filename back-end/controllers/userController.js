@@ -44,6 +44,7 @@ exports.apiLogin = (req, res) => {
           { expiresIn: "365d" }
         ),
         email: user.data.email,
+        id: user.data._id,
       });
     })
     .catch(function (e) {

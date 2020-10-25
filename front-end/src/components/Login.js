@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Axios from "axios";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -11,22 +12,36 @@ const Login = () => {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const clickSubmit = (event) => {
+  // const clickSubmit = (event) => {
+  //   event.preventDefault();
+  //   fetch(`${process.env.REACT_APP_API_URL}/login`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   })
+  //     .then(function (response) {
+  //       console.log(response);
+  //       localStorage.setItem("webAppv2Email", response.token);
+  //     })
+  //     .catch(function () {
+  //       console.log("Please try again later");
+  //     });
+  // };
+
+  const clickSubmit = async (event) => {
     event.preventDefault();
-    fetch(`${process.env.REACT_APP_API_URL}/login`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function () {
-        console.log("Please try again later");
-      });
+    try {
+      const response = await Axios.post(
+        `${process.env.REACT_APP_API_URL}/login`,
+        { email, password }
+      );
+      //console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const loginForm = () => (

@@ -35,7 +35,7 @@ const Register = () => {
       body: formData,
     })
       .then((response) => {
-        console.log(response.json("Data submitted"));
+        response.json("Data submitted");
       })
       .catch((err) => {
         console.log(err);

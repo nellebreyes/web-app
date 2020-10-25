@@ -54,8 +54,10 @@ exports.apiLogin = (req, res) => {
 exports.apiRegister = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
-  try {
-    form.parse(req, (fields, files));
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({ error: "Image could not be uploaded" });
+    }
     let user = new User({ fields, files });
     user
       .register()
@@ -70,11 +72,9 @@ exports.apiRegister = (req, res) => {
         });
       })
       .catch((regErrors) => {
-        throw regErrors;
+        return res.status(500).send(regErrors);
       });
-  } catch (e) {
-    res.send(e);
-  }
+  });
 };
 
 exports.apiGetUserHome = async (req, res) => {

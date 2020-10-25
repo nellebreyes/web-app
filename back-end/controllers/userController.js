@@ -13,6 +13,7 @@ exports.checkToken = (req, res) => {
 
 exports.apiMustBeLoggedIn = (req, res, next) => {
   try {
+    //args: incoming token and the jwtsecret
     req.apiUser = jwt.verify(req.body.token, process.env.JWTSECRET);
     next();
   } catch (e) {
@@ -35,7 +36,7 @@ exports.apiLogin = (req, res) => {
   //console.log(req.body);
   user
     .login()
-    .then(function (result) {
+    .then(function () {
       res.json({
         token: jwt.sign(
           { _id: user.data._id, email: user.data.email },
@@ -53,11 +54,8 @@ exports.apiLogin = (req, res) => {
 exports.apiRegister = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      return res.status(400).json({ error: "Image could not be uploaded" });
-    }
-
+  try {
+    form.parse(req, (fields, files));
     let user = new User({ fields, files });
     user
       .register()
@@ -72,15 +70,17 @@ exports.apiRegister = (req, res) => {
         });
       })
       .catch((regErrors) => {
-        res.status(500).send(regErrors);
+        throw regErrors;
       });
-  });
+  } catch (e) {
+    res.send(e);
+  }
 };
 
 exports.apiGetUserHome = async (req, res) => {
   try {
-    let posts = await Post.getFeed(req.apiUser._id);
-    res.json(posts);
+    let userData = await User.getUserPhoto(req.apiUser.email);
+    res.json(userData);
   } catch (e) {
     res.status(500).send("Error");
   }

@@ -6,11 +6,13 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     photo: "",
+    error: "",
+    loading: false,
     formData: "",
   });
 
   //destructure to grab easily
-  const { email, password, confirmPassword, formData } = values;
+  const { email, password, confirmPassword, error, loading, formData } = values;
 
   //this will run everytime the component mounts and the values change
   useEffect(() => {
@@ -20,19 +22,20 @@ const Register = () => {
   //high order function, function returning another function
   const handleChange = (name) => (event) => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    formData.set(name, value);
-    //using the rest operator, take the rest of the values
+    formData.append(name, value);
     setValues({ ...values, [name]: value });
   };
 
-  const register = (formData) => {
+  const register = () => {
     fetch(`${process.env.REACT_APP_API_URL}/register`, {
       method: "POST",
-      headers: { Accept: "application/json" },
+      headers: {
+        Accept: "application/json",
+      },
       body: formData,
     })
       .then((response) => {
-        return response.json();
+        console.log(response.json("Data submitted"));
       })
       .catch((err) => {
         console.log(err);
@@ -41,8 +44,8 @@ const Register = () => {
 
   const clickSubmit = (event) => {
     event.preventDefault();
-    setValues({ ...values });
-    register(formData);
+    setValues({ ...values, error: "", loading: true });
+    register();
   };
 
   const RegisterForm = () => (
@@ -97,7 +100,6 @@ const Register = () => {
     <div className="form-container">
       <h2>Register for an Account</h2>
       {RegisterForm()}
-      {JSON.stringify(values)}
     </div>
   );
 };

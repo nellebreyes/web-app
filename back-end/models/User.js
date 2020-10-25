@@ -59,7 +59,7 @@ User.prototype.validate = function () {
   });
 };
 
-User.prototype.register = async function () {
+User.prototype.register = function () {
   return new Promise(async (resolve, reject) => {
     // console.log(this.data);
     let { fields, files } = this.data;
@@ -124,52 +124,6 @@ User.prototype.login = function () {
       .catch(function () {
         reject("Invalid email or password");
       });
-  });
-};
-
-User.findByEmail = function (email) {
-  let con = db.dbfunc;
-  let usersCollection = con.collection("users");
-  return new Promise(function (resolve, reject) {
-    if (typeof email != "string") {
-      reject();
-      return;
-    }
-    usersCollection
-      .findOne({ email: email })
-      .then(function (userDoc) {
-        if (userDoc) {
-          userDoc = new User(userDoc, true);
-          userDoc = {
-            _id: userDoc.data._id,
-            email: userDoc.data.email,
-          };
-          resolve(userDoc);
-        } else {
-          reject();
-        }
-      })
-      .catch(function (e) {
-        reject();
-      });
-  });
-};
-
-User.doesEmailExist = function (email) {
-  let con = db.dbfunc;
-  let usersCollection = con.collection("users");
-  return new Promise(async function (resolve, reject) {
-    if (typeof email != "string") {
-      resolve(false);
-      return;
-    }
-
-    let user = await usersCollection.findOne({ email: email });
-    if (user) {
-      resolve(true);
-    } else {
-      resolve(false);
-    }
   });
 };
 

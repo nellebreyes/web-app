@@ -12,7 +12,7 @@ const Register = () => {
   });
 
   //destructure to grab easily
-  const { email, password, confirmPassword, error, loading, formData } = values;
+  const { formData } = values;
 
   //this will run everytime the component mounts and the values change
   useEffect(() => {
@@ -35,7 +35,7 @@ const Register = () => {
       body: formData,
     })
       .then((response) => {
-        response.json("Data submitted");
+        console.log(response);
       })
       .catch((err) => {
         console.log(err);

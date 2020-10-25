@@ -60,24 +60,24 @@ User.prototype.validate = function () {
 };
 
 User.prototype.register = function () {
+  // console.log(this.data);
+  let { fields, files } = this.data;
+  let photoObj = files.photo;
+
+  let photo = {
+    data: fs.readFileSync(photoObj.path),
+    name: photoObj.name,
+    contentType: photoObj.type,
+    size: photoObj.size,
+  };
+
+  this.email = fields.email.toLowerCase().trim();
+  this.password = fields.password;
+  this.confirmPassword = fields.confirmPassword;
+  this.photo = photo;
+  //step 1 validate user data //since we added async function to validate method, we need to make sure that that is
+  //completed before we allow other steps to happen
   return new Promise(async (resolve, reject) => {
-    // console.log(this.data);
-    let { fields, files } = this.data;
-    let photoObj = files.photo;
-
-    let photo = {
-      data: fs.readFileSync(photoObj.path),
-      name: photoObj.name,
-      contentType: photoObj.type,
-      size: photoObj.size,
-    };
-
-    this.email = fields.email.toLowerCase().trim();
-    this.password = fields.password;
-    this.confirmPassword = fields.confirmPassword;
-    this.photo = photo;
-    //step 1 validate user data //since we added async function to validate method, we need to make sure that that is
-    //completed before we allow other steps to happen
     await this.validate();
 
     // Step 2: Only if there are no validation errors
@@ -103,26 +103,25 @@ User.prototype.register = function () {
 User.prototype.login = function () {
   let con = db.dbfunc;
   let usersCollection = con.collection("users");
+  this.data.email = this.data.email.toLowerCase().trim();
   return new Promise((resolve, reject) => {
-    console.log(this.data);
-    this.data.email = this.data.email.toLowerCase().trim();
-
-    //NOTE: do not forget to pass-in the logger parameter
     usersCollection
       .findOne({ email: this.data.email })
+      //logger only exists if db is able to find a matching email
       .then((logger) => {
         //args: incoming pw and saved pw
         if (
           logger &&
           bycrypt.compareSync(this.data.password, logger.password)
         ) {
+          this.data = logger;
           resolve("Thank you for loggin in");
         } else {
           reject("Invalid email or password");
         }
       })
       .catch(function () {
-        reject("Invalid email or password");
+        reject("Please try again later");
       });
   });
 };

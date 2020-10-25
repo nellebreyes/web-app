@@ -11,26 +11,22 @@ const Login = () => {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const login = (user) => {
+  const clickSubmit = (event) => {
+    event.preventDefault();
     fetch(`${process.env.REACT_APP_API_URL}/login`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify({ email, password }),
     })
-      .then((response) => {
-        return response.json();
+      .then(function (response) {
+        console.log(response);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(function () {
+        console.log("Please try again later");
       });
-  };
-
-  const clickSubmit = (event) => {
-    event.preventDefault();
-    login({ email, password });
   };
 
   const loginForm = () => (

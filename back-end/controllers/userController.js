@@ -56,8 +56,9 @@ exports.apiRegister = (req, res) => {
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
     if (err) {
-      return res.status(400).json({ error: "Image could not be uploaded" });
+      res.send(err);
     }
+
     let user = new User({ fields, files });
     user
       .register()
@@ -66,13 +67,13 @@ exports.apiRegister = (req, res) => {
           token: jwt.sign(
             { _id: user.data._id, email: user.data.email },
             process.env.JWTSECRET,
-            { expiresIn: tokenLasts }
+            { expiresIn: "365d" }
           ),
           email: user.data.email,
         });
       })
       .catch((regErrors) => {
-        return res.status(500).send(regErrors);
+        res.send(regErrors);
       });
   });
 };
@@ -93,7 +94,7 @@ exports.ifUserExists = (req, res, next) => {
       next();
     })
     .catch(function (e) {
-      res.json(false);
+      res.json(e);
     });
 };
 

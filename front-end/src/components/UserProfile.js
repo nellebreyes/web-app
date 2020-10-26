@@ -20,8 +20,9 @@ function UserProfile() {
 
         setProfileData({
           email: response.data.email,
-          photo: response.data.url,
+          photo: response.data.photo.data,
         });
+        // console.log(response.data.photo.data);
       } catch (err) {
         console.log("there was a problem");
       }
@@ -32,11 +33,7 @@ function UserProfile() {
   return (
     <div className="container">
       <div className="profilePhoto">
-        <img
-          className="profile-pic"
-          scr={`${process.env.REACT_APP_API_URL}/profile/${id}`}
-          alt="profile pic"
-        />
+        <img src={`data:image/jpeg;base64,${profileData.photo}`} />
       </div>
       <p className="email">Email: {profileData.email}</p>
     </div>

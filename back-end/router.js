@@ -4,10 +4,10 @@ const userController = require("./controllers/userController");
 router.get("/", (req, res) => res.json("Backend is up and running."));
 
 //user related routes
-router.get(
+router.post(
   "/profile/:id",
-  userController.apiMustBeLoggedIn,
-  userController.apiGetUserProfile
+  //userController.apiMustBeLoggedIn,
+  userController.profileBasicData
 );
 router.post("/register", userController.apiRegister);
 router.post("/login", userController.apiLogin);

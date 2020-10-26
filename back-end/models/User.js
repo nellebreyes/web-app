@@ -2,6 +2,7 @@ const validator = require("validator");
 const bycrypt = require("bcryptjs");
 const db = require("../app");
 const fs = require("fs");
+const { ObjectId } = require("mongodb");
 
 let User = function (data) {
   //console.log(data);
@@ -122,6 +123,34 @@ User.prototype.login = function () {
       })
       .catch(function () {
         reject("Please try again later");
+      });
+  });
+};
+
+User.prototype.getProfileById = function () {
+  let con = db.dbfunc;
+  let usersCollection = con.collection("users");
+  const { id } = this.data;
+  // console.log("fromUserModel", id);
+
+  return new Promise(function (resolve, reject) {
+    usersCollection
+      .findOne({ _id: ObjectId(id) })
+      .then(function (userDoc) {
+        if (userDoc) {
+          userDoc = new User(userDoc, true);
+          userDoc = {
+            _id: userDoc.data._id,
+            email: userDoc.data.email,
+            photo: userDoc.data.photo,
+          };
+          resolve(userDoc);
+        } else {
+          reject("Id not found");
+        }
+      })
+      .catch(function (e) {
+        reject(e);
       });
   });
 };

@@ -79,28 +79,16 @@ exports.apiRegister = (req, res) => {
   });
 };
 
-exports.apiGetUserHome = async (req, res) => {
-  try {
-    let userData = await User.getUserPhoto(req.apiUser.email);
-    res.json(userData);
-  } catch (e) {
-    res.status(500).send("Error");
-  }
-};
+exports.profileBasicData = async (req, res) => {
+  //console.log("fromUserConrller", req.params);
+  let user = new User(req.params);
 
-exports.ifUserExists = (req, res, next) => {
-  User.findByEmail(req.params.email)
-    .then(function (userDocument) {
-      req.profileUser = userDocument;
-      next();
+  user
+    .getProfileById()
+    .then((userDoc) => {
+      res.send(userDoc);
     })
-    .catch(function (e) {
-      res.json(e);
+    .catch((err) => {
+      res.send(err);
     });
-};
-
-exports.profileBasicData = (req, res) => {
-  res.json({
-    profileEmail: req.profileUser.email,
-  });
 };

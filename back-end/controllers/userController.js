@@ -57,13 +57,15 @@ exports.apiRegister = (req, res) => {
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
     if (err) {
-      res.send(err);
+      return res.status(400).json({ error: err.message });
     }
 
     let user = new User({ fields, files });
-    user
-      .register()
-      .then(() => {
+
+    try {
+      const result = user.register();
+      console.log(result);
+      if (result) {
         res.json({
           token: jwt.sign(
             { _id: user.data._id, email: user.data.email },
@@ -72,10 +74,13 @@ exports.apiRegister = (req, res) => {
           ),
           email: user.data.email,
         });
-      })
-      .catch((regErrors) => {
-        res.send(regErrors);
-      });
+      } else {
+        return res.status(400).json({ error: "Failed to register" });
+      }
+      console.log(user);
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
   });
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
 
 const Register = () => {
   const [values, setValues] = useState({
@@ -26,36 +25,20 @@ const Register = () => {
     setValues({ ...values, [name]: value });
   };
 
-  const register = async () => {
-    // fetch(`${process.env.REACT_APP_API_URL}/register`, {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //   },
-    //   body: formData,
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    try {
-      const response = await Axios.post(
-        `${process.env.REACT_APP_API_URL}/register`,
-        {
-          body: formData,
-        }
-      );
-      if (response.data) {
-        console.log(response.data);
-      } else {
-        console.log("There was an error");
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const register = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/register`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   const clickSubmit = (event) => {

@@ -33,7 +33,7 @@ function UserProfile() {
   return (
     <div className="profile-section">
       <h2>Profile Page</h2>
-      <i class="fas fa-ellipsis-h fa-2x mb-2"></i>
+      <i className="fas fa-ellipsis-h fa-2x mb-2"></i>
       <div className="profilePhoto">
         <img src={`data:image/jpeg;base64,${profileData.photo}`} />
       </div>

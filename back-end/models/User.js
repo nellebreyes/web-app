@@ -61,10 +61,9 @@ User.prototype.validate = function () {
 };
 
 User.prototype.register = function () {
-  // console.log(this.data);
+  console.log(this.data);
   let { fields, files } = this.data;
   let photoObj = files.photo;
-
   let photo = {
     data: fs.readFileSync(photoObj.path),
     name: photoObj.name,

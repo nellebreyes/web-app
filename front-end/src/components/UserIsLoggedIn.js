@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import ContextProvider from "../ContextProvider";
 
 function UserIsLoggedIn() {
@@ -16,17 +16,17 @@ function UserIsLoggedIn() {
       <div className="header-container">
         <div className="logo">
           <h1>
-            <Link to="/" alt="Web App">
+            <NavLink to="/" alt="Web&nbsp;App">
               Web App
-            </Link>
+            </NavLink>
           </h1>
         </div>
         <div className="nav">
           <ul>
             <li>
-              <Link onClick={handleLogout} to="/">
+              <NavLink onClick={handleLogout} activeClassName="active" to="/">
                 Sign Out
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>

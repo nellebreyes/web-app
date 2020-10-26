@@ -4,9 +4,7 @@ function Footer() {
   return (
     <div className="footer">
       <div className="container">
-        <div className="footer-bottom">
-          &copy; 2020 All rights reserved. Developed by Marinelle Reyes
-        </div>
+        <div className="footer-bottom">Developed by Marinelle Reyes @ 2020</div>
       </div>
     </div>
   );

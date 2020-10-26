@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function UserIsLoggedOut() {
   return (
@@ -7,18 +7,22 @@ function UserIsLoggedOut() {
       <div className="header-container">
         <div className="logo">
           <h1>
-            <Link to="/" alt="Web App">
-              Web App
-            </Link>
+            <NavLink to="/" alt="Web App">
+              Web&nbsp;App
+            </NavLink>
           </h1>
         </div>
         <div className="nav">
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <NavLink activeClassName="active" to="/">
+                Home
+              </NavLink>
             </li>
             <li>
-              <Link to="/register">Register</Link>
+              <NavLink activeClassName="active" to="/register">
+                Register
+              </NavLink>
             </li>
           </ul>
         </div>

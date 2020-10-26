@@ -13,9 +13,28 @@ body {
   color: #343a40;
 }
 
+.main {
+  min-height: 100vh;
+  display: grid;
+}
+
 .container {
   width: 80%;
   margin: 0 auto;
+  min-height: 100%;
+}
+
+a {
+  text-decoration: none;
+  vertical-align: middle;
+
+  &:hover {
+    color: silver;
+  }
+
+  &:visited {
+    color: unset;
+  }
 }
 
 .mb-1 {

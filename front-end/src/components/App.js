@@ -5,6 +5,7 @@ import Home from "./Home";
 import UserProfile from "./UserProfile";
 import Register from "./Register";
 import ContextProvider from "../ContextProvider";
+import Footer from "./Footer";
 
 function App() {
   const [status, setStatus] = useState(
@@ -29,6 +30,7 @@ function App() {
 
           <Route exact path="/register" component={Register} />
         </Switch>
+        <Footer />
       </BrowserRouter>
     </ContextProvider.Provider>
   );

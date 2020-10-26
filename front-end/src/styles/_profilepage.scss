@@ -1,0 +1,23 @@
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem;
+
+  .profilePhoto {
+    margin: 5px;
+    display: flex;
+    border: 1px solid rgba(128, 128, 128, 0.26);
+  }
+
+  .content {
+    padding: 2rem;
+    width: 90%;
+    margin: 0 auto;
+    line-height: 1.6rem;
+    letter-spacing: 1px;
+  }
+  i {
+    color: #49c1a2;
+  }
+}

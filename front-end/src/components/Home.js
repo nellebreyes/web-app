@@ -2,11 +2,7 @@ import React from "react";
 import Login from "./Login";
 
 function Home() {
-  return (
-    <div className="container">
-      <Login />
-    </div>
-  );
+  return <Login />;
 }
 
 export default Home;

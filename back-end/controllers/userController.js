@@ -87,11 +87,7 @@ exports.apiRegister = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    if (err) {
-      return res.status(400).json({ error: err.message });
-    }
-
-    let user = new User({ fields, files });
+    let user = new User({ err, fields, files });
     try {
       user
         .register()

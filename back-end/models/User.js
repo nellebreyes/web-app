@@ -3,6 +3,7 @@ const bycrypt = require("bcryptjs");
 const db = require("../app");
 const fs = require("fs");
 const { ObjectId } = require("mongodb");
+const { resolve } = require("path");
 
 let User = function (data) {
   //console.log(data);
@@ -63,29 +64,31 @@ User.prototype.validate = function () {
 User.prototype.register = function () {
   //step 1 validate user data //since we added async function to validate method, we need to make sure that that is
   //completed before we allow other steps to happen
-  return new Promise(async (resolve, reject) => {
-    let { fields, files } = this.data;
-    if (files.photo != null || files.photo !== "") {
-      let photoObj = files.photo;
-      let photo = {
-        data: fs.readFileSync(photoObj.path),
-        name: photoObj.name,
-        contentType: photoObj.type,
-        size: photoObj.size,
-      };
-      this.photo = photo;
-    } else {
-      reject({ error: "Photo is required" });
-    }
-    if (fields != null || fields !== "") {
-      this.email = fields.email.toLowerCase().trim();
-      this.password = fields.password;
-      this.confirmPassword = fields.confirmPassword;
-    } else {
-      reject({ error: "Details are required" });
-    }
-    await this.validate();
 
+  let { fields, files } = this.data;
+  if (files.photo != null || files.photo !== "") {
+    console.log(files);
+    let photoObj = files.photo;
+    let photo = {
+      data: fs.readFileSync(photoObj.path),
+      name: photoObj.name,
+      contentType: photoObj.type,
+      size: photoObj.size,
+    };
+    this.photo = photo;
+  } else {
+    return { error: "Photo is required" };
+  }
+  if (fields != null || fields !== "") {
+    this.email = fields.email.toLowerCase().trim();
+    this.password = fields.password;
+    this.confirmPassword = fields.confirmPassword;
+  } else {
+    return { error: "Details are required" };
+  }
+
+  return new Promise(async (resolve, reject) => {
+    await this.validate();
     // Step 2: Only if there are no validation errors
     // then save the user data into a database
     if (!this.errors.length) {

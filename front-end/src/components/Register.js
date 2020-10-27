@@ -22,47 +22,55 @@ const Register = () => {
   //high order function, function returning another function
   const handleChange = (name) => (event) => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
-    formData.append(name, value);
+    formData.set(name, value);
     setValues({ ...values, [name]: value });
   };
 
-  const register = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/register`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-      body: formData,
-    })
-      .then((response) => {
-        console.log(response.redirected);
-      })
-      .catch((err) => {
-        console.log(false);
-      });
-  };
-
-  // const register = async () => {
-  //   try {
-  //     const response = await Axios(
-  //       `${process.env.REACT_APP_API_URL}/register`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           Accept: "application/json",
-  //         },
-  //         body: formData,
+  // const register = () => {
+  //   alert(JSON.stringify(formData.entries));
+  //   fetch(`${process.env.REACT_APP_API_URL}/register`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //     },
+  //     body: formData,
+  //   }).then(
+  //     (response) => {
+  //       console.log(response);
+  //       if (response.status == 200) {
+  //         console.log("success");
+  //       } else {
+  //         console.log("failed");
   //       }
-  //     );
-  //     if (response.data) {
-  //       console.log(response.data);
-  //     } else {
-  //       console.log("Error");
+  //     },
+  //     (error) => {
+  //       alert(JSON.stringify(error));
   //     }
-  //   } catch (e) {
-  //     console.log("There was a problem", e);
-  //   }
+  //   );
   // };
+
+  const register = async () => {
+    try {
+      const response = await Axios.post(
+        `${process.env.REACT_APP_API_URL}/register`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.data.status === 200) {
+        console.log("You have registered successfuly");
+      }
+    } catch (e) {
+      if (e.response.error == "") {
+        console.log("You must fill out all the fields");
+      } else {
+        console.log("There was a data", e.response);
+      }
+    }
+  };
 
   const clickSubmit = (event) => {
     event.preventDefault();

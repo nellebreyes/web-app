@@ -26,29 +26,6 @@ const Register = () => {
     setValues({ ...values, [name]: value });
   };
 
-  // const register = () => {
-  //   alert(JSON.stringify(formData.entries));
-  //   fetch(`${process.env.REACT_APP_API_URL}/register`, {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //     },
-  //     body: formData,
-  //   }).then(
-  //     (response) => {
-  //       console.log(response);
-  //       if (response.status == 200) {
-  //         console.log("success");
-  //       } else {
-  //         console.log("failed");
-  //       }
-  //     },
-  //     (error) => {
-  //       alert(JSON.stringify(error));
-  //     }
-  //   );
-  // };
-
   const register = async () => {
     try {
       const response = await Axios.post(
@@ -60,14 +37,23 @@ const Register = () => {
           },
         }
       );
-      if (response.data.status === 200) {
-        console.log("You have registered successfuly");
+      console.log(response.data.message);
+      if (response.data.message == "success") {
+        setValues({
+          email: "",
+          password: "",
+          confirmPassword: "",
+          photo: "",
+          error: "",
+          loading: false,
+          formData: "",
+        });
       }
     } catch (e) {
-      if (e.response.error == "") {
-        console.log("You must fill out all the fields");
+      if (e.response.data.error.length > 0) {
+        console.log(e.response.data.error);
       } else {
-        console.log("There was a data", e.response);
+        console.log("All fields are required", e.response.data.error);
       }
     }
   };

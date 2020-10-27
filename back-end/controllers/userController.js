@@ -51,37 +51,6 @@ exports.apiLogin = (req, res) => {
       res.json(e);
     });
 };
-//working version but need return msgs be fixed
-// exports.apiRegister = (req, res) => {
-//   let form = new formidable.IncomingForm();
-//   form.keepExtensions = true;
-//   form.parse(req, (err, fields, files) => {
-//     if (err) {
-//       return res.status(400).json({ error: err.message });
-//     }
-
-//     let user = new User({ fields, files });
-
-//     try {
-//       const result = user.register();
-//       console.log("user registration result", result);
-//       if (result) {
-//         res.json({
-//           token: jwt.sign(
-//             { _id: user.data._id, email: user.data.email },
-//             process.env.JWTSECRET,
-//             { expiresIn: "365d" }
-//           ),
-//           email: user.data.email,
-//         });
-//       } else {
-//         return res.status(400).json({ error: "Failed to register" });
-//       }
-//     } catch (e) {
-//       return res.status(400).json({ error: e });
-//     }
-//   });
-// };
 
 exports.apiRegister = (req, res) => {
   let form = new formidable.IncomingForm();
@@ -92,7 +61,7 @@ exports.apiRegister = (req, res) => {
       user
         .register()
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           res.json({
             token: jwt.sign(
               { _id: user.data._id, email: user.data.email },
@@ -100,13 +69,14 @@ exports.apiRegister = (req, res) => {
               { expiresIn: "365d" }
             ),
             email: user.data.email,
+            message: "success",
           });
         })
         .catch((e) => {
           return res.status(400).send({ error: e });
         });
     } catch (e) {
-      console.log(e);
+      //console.log(e);
       return res.status(400).json({ error: e });
     }
   });

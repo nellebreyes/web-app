@@ -31,6 +31,16 @@ exports.doesEmailExist = (req, res) => {
     });
 };
 
+exports.doesIdExist = (req, res) => {
+  User.findByEmail(req.body.id)
+    .then(function () {
+      res.json(true);
+    })
+    .catch(function (e) {
+      res.json(false);
+    });
+};
+
 exports.apiLogin = (req, res) => {
   let user = new User(req.body);
   //console.log(req.body);
@@ -48,7 +58,7 @@ exports.apiLogin = (req, res) => {
       });
     })
     .catch(function (e) {
-      res.json(e);
+      res.send("Invalid email or password");
     });
 };
 
@@ -69,6 +79,7 @@ exports.apiRegister = (req, res) => {
               { expiresIn: "365d" }
             ),
             email: user.data.email,
+            id: user.data.id,
             message: "success",
           });
         })

@@ -3,7 +3,6 @@ const bycrypt = require("bcryptjs");
 const db = require("../app");
 const fs = require("fs");
 const { ObjectId } = require("mongodb");
-const formidable = require("formidable");
 
 let User = function (data) {
   //console.log(data);

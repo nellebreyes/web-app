@@ -1,7 +1,8 @@
 import Axios from "axios";
 import React, { useState, useEffect } from "react";
+import { withRouter } from "react-router-dom";
 
-const Register = () => {
+const Register = (props) => {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -37,8 +38,8 @@ const Register = () => {
           },
         }
       );
-      console.log(response.data.message);
-      if (response.data.message == "success") {
+      //console.log(response.data.message);
+      if (response.data.message == "success" && response.data.token) {
         setValues({
           email: "",
           password: "",
@@ -48,6 +49,10 @@ const Register = () => {
           loading: false,
           formData: "",
         });
+        alert(
+          "You have successfully registered, you will be redirected to the login page"
+        );
+        props.history.push(`/`);
       }
     } catch (e) {
       if (e.response.data.error.length > 0) {
@@ -121,4 +126,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default withRouter(Register);

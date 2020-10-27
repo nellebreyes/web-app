@@ -6,7 +6,7 @@ router.get("/", (req, res) => res.json("Backend is up and running."));
 //user related routes
 router.post(
   "/profile/:id",
-  //userController.apiMustBeLoggedIn,
+  userController.apiMustBeLoggedIn,
   userController.profileBasicData
 );
 router.post("/register", userController.apiRegister);

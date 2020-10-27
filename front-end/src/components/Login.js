@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import Axios from "axios";
 import ContextProvider from "../ContextProvider";
@@ -25,14 +25,15 @@ const Login = (props) => {
         `${process.env.REACT_APP_API_URL}/login`,
         { email, password }
       );
-      //console.log(response);
-      if (response.data) {
+      if (response.data.token) {
+        console.log("login page", response.data);
         localStorage.setItem("webappv2Token", response.data.token);
         localStorage.setItem("webappv2Email", response.data.email);
+        localStorage.setItem("webappv2Id", response.data.id);
         setStatus(Boolean(true));
         props.history.push(`/profile/${response.data.id}`);
       } else {
-        console.log("Incorrect username / password");
+        alert("Invalid email or password");
       }
     } catch (err) {
       console.log(err);

@@ -9,6 +9,7 @@ function UserIsLoggedIn() {
     setStatus(Boolean(false));
     localStorage.removeItem("webappv2Token");
     localStorage.removeItem("webappv2Email");
+    localStorage.removeItem("webappv2Id");
   }
 
   return (

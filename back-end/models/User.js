@@ -61,23 +61,29 @@ User.prototype.validate = function () {
 };
 
 User.prototype.register = function () {
-  console.log(this.data);
-  let { fields, files } = this.data;
-  let photoObj = files.photo;
-  let photo = {
-    data: fs.readFileSync(photoObj.path),
-    name: photoObj.name,
-    contentType: photoObj.type,
-    size: photoObj.size,
-  };
-
-  this.email = fields.email.toLowerCase().trim();
-  this.password = fields.password;
-  this.confirmPassword = fields.confirmPassword;
-  this.photo = photo;
   //step 1 validate user data //since we added async function to validate method, we need to make sure that that is
   //completed before we allow other steps to happen
   return new Promise(async (resolve, reject) => {
+    let { fields, files } = this.data;
+    if (files.photo != null || files.photo !== "") {
+      let photoObj = files.photo;
+      let photo = {
+        data: fs.readFileSync(photoObj.path),
+        name: photoObj.name,
+        contentType: photoObj.type,
+        size: photoObj.size,
+      };
+      this.photo = photo;
+    } else {
+      reject({ error: "Photo is required" });
+    }
+    if (fields != null || fields !== "") {
+      this.email = fields.email.toLowerCase().trim();
+      this.password = fields.password;
+      this.confirmPassword = fields.confirmPassword;
+    } else {
+      reject({ error: "Details are required" });
+    }
     await this.validate();
 
     // Step 2: Only if there are no validation errors

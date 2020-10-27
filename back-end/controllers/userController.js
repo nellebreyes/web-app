@@ -64,7 +64,7 @@ exports.apiRegister = (req, res) => {
 
     try {
       const result = user.register();
-      console.log(result);
+      console.log("user registration result", result);
       if (result) {
         res.json({
           token: jwt.sign(
@@ -77,12 +77,42 @@ exports.apiRegister = (req, res) => {
       } else {
         return res.status(400).json({ error: "Failed to register" });
       }
-      console.log(user);
     } catch (e) {
       return res.status(400).json({ error: e });
     }
   });
 };
+
+// exports.apiRegister = async (req, res) => {
+//   let form = new formidable.IncomingForm();
+//   form.keepExtensions = true;
+//   let user;
+//   form.parse(req, (err, fields, files) => {
+//     if (err) {
+//       return res.status(400).json({ error: err.message });
+//     }
+//     user = new User({ fields, files });
+//   });
+
+//   try {
+//     const result = await user.register();
+//     console.log("user registration result", result);
+//     if (result) {
+//       res.json({
+//         token: jwt.sign(
+//           { _id: user.data._id, email: user.data.email },
+//           process.env.JWTSECRET,
+//           { expiresIn: "365d" }
+//         ),
+//         email: user.data.email,
+//       });
+//     } else {
+//       return res.status(400).json({ error: "Failed to register" });
+//     }
+//   } catch (e) {
+//     return res.status(400).json({ error: e });
+//   }
+// };
 
 exports.profileBasicData = async (req, res) => {
   //console.log("fromUserConrller", req.params);

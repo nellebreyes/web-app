@@ -1,3 +1,4 @@
+import Axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const Register = () => {
@@ -34,12 +35,34 @@ const Register = () => {
       body: formData,
     })
       .then((response) => {
-        console.log(response);
+        console.log(response.redirected);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log(false);
       });
   };
+
+  // const register = async () => {
+  //   try {
+  //     const response = await Axios(
+  //       `${process.env.REACT_APP_API_URL}/register`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Accept: "application/json",
+  //         },
+  //         body: formData,
+  //       }
+  //     );
+  //     if (response.data) {
+  //       console.log(response.data);
+  //     } else {
+  //       console.log("Error");
+  //     }
+  //   } catch (e) {
+  //     console.log("There was a problem", e);
+  //   }
+  // };
 
   const clickSubmit = (event) => {
     event.preventDefault();

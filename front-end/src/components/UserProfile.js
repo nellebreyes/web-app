@@ -24,7 +24,7 @@ function UserProfile() {
         });
         // console.log(response.data.photo.data);
       } catch (err) {
-        console.log("there was a problem");
+        //console.log("there was a problem");
       }
     }
     fetchData();

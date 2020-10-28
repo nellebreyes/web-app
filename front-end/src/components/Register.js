@@ -56,9 +56,9 @@ const Register = (props) => {
       }
     } catch (e) {
       if (e.response.data.error.length > 0) {
-        console.log(e.response.data.error);
+        //   console.log(e.response.data.error);
       } else {
-        console.log("All fields are required", e.response.data.error);
+        //    console.log("All fields are required", e.response.data.error);
       }
     }
   };
@@ -90,7 +90,7 @@ const Register = (props) => {
       let email = e.target.value;
       if (!isEmail(email)) {
         // counter++;
-        setError("Email requires valid email format");
+        setError("Email must be in valid format");
         return;
       } else if (email == "") {
         setError("Email is required");
@@ -105,7 +105,7 @@ const Register = (props) => {
       if (!isValidPW(password)) {
         // counter++;
         setError(
-          "Password must be alphanumeric , min of 8 up to 30 characters, and no spaces."
+          "Password must be alphanumeric , min of 8 up to 30 characters."
         );
         return;
       } else if (password == "") {
@@ -121,7 +121,7 @@ const Register = (props) => {
       let confirmPassword = e.target.value;
       if (!isSame(password, confirmPassword)) {
         // counter++;
-        setError("Confirm password must match the new password.");
+        setError("Confirm password and password must match.");
         return;
       } else if (confirmPassword == "") {
         setError("Confirm password is required");

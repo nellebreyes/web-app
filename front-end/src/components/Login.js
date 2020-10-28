@@ -26,7 +26,7 @@ const Login = (props) => {
         { email, password }
       );
       if (response.data.token) {
-        console.log("login page", response.data);
+        //console.log("login page", response.data);
         localStorage.setItem("webappv2Token", response.data.token);
         localStorage.setItem("webappv2Email", response.data.email);
         localStorage.setItem("webappv2Id", response.data.id);

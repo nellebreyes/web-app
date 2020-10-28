@@ -121,7 +121,7 @@ const Register = (props) => {
       let confirmPassword = e.target.value;
       if (!isSame(password, confirmPassword)) {
         // counter++;
-        setError("Confirm password and password must match.");
+        setError("Confirm password and password must match");
         return;
       } else if (confirmPassword == "") {
         setError("Confirm password is required");
@@ -186,7 +186,7 @@ const Register = (props) => {
         key === "confirmPassword" &&
         !isSame(password, confirmPassword)
       ) {
-        setError("Confirm password must match the password");
+        setError("Confirm password and password must match");
         setValues({ ...values, [key]: values[key] });
         return;
       } else {

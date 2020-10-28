@@ -57,6 +57,7 @@ const Register = (props) => {
     } catch (e) {
       if (e.response.data.error.length > 0) {
         //   console.log(e.response.data.error);
+        //alert(e.response.data.error);
       } else {
         //    console.log("All fields are required", e.response.data.error);
       }
@@ -65,7 +66,7 @@ const Register = (props) => {
 
   //validation of input fields
   let [error, setError] = useState("");
-
+  let counter;
   //email regex
   const isEmail = (email) => {
     const expression = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -89,7 +90,7 @@ const Register = (props) => {
     if (inputName === "email") {
       let email = e.target.value;
       if (!isEmail(email)) {
-        // counter++;
+        counter++;
         setError("Email must be in valid format");
         return;
       } else if (email == "") {
@@ -103,7 +104,7 @@ const Register = (props) => {
     if (inputName === "password") {
       let password = e.target.value;
       if (!isValidPW(password)) {
-        // counter++;
+        counter++;
         setError(
           "Password must be alphanumeric , min of 8 up to 30 characters."
         );
@@ -120,7 +121,7 @@ const Register = (props) => {
     if (inputName === "confirmPassword") {
       let confirmPassword = e.target.value;
       if (!isSame(password, confirmPassword)) {
-        // counter++;
+        counter++;
         setError("Confirm password and password must match");
         return;
       } else if (confirmPassword == "") {
@@ -135,7 +136,7 @@ const Register = (props) => {
     if (inputName === "photo") {
       let photo = e.target.value;
       if (photo == "") {
-        //   counter++;
+        counter++;
         setError("Photo is required.");
         return;
       } else {
@@ -200,7 +201,9 @@ const Register = (props) => {
     event.preventDefault();
     setValues({ ...values, error: "", loading: true });
     validateFields();
-    register();
+    if (counter != 0) {
+      register();
+    }
   };
 
   const RegisterForm = () => (

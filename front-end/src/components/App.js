@@ -31,6 +31,17 @@ function App() {
             )}
 
             <Route exact path="/register" component={Register} />
+            <Route
+              render={() => (
+                <div className="form-container">
+                  <h3 style={{ textAlign: "center" }}>
+                    Page Not Found.
+                    <br /> This website currently serves a Profile Page for
+                    logged in users.
+                  </h3>
+                </div>
+              )}
+            />
           </Switch>
           <Footer />
         </Page>

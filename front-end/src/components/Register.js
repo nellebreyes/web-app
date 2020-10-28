@@ -9,12 +9,11 @@ const Register = (props) => {
     confirmPassword: "",
     photo: "",
     error: "",
-    loading: false,
     formData: "",
   });
 
   //destructure to grab easily
-  const { formData } = values;
+  const { email, password, confirmPassword, photo, formData } = values;
 
   useEffect(() => {
     setValues({ ...values, formData: new FormData() });
@@ -23,6 +22,7 @@ const Register = (props) => {
   //high order function, function returning another function
   const handleChange = (name) => (event) => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
+    validateInput(name, event);
     formData.set(name, value);
     setValues({ ...values, [name]: value });
   };
@@ -63,9 +63,141 @@ const Register = (props) => {
     }
   };
 
+  //validation of input fields
+  let [error, setError] = useState("");
+
+  //email regex
+  const isEmail = (email) => {
+    const expression = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    return expression.test(String(email).toLowerCase());
+  };
+
+  //aphanumeric password between 8 to 30 chars
+  const isValidPW = (password) => {
+    const expression = /^(?=.*[a-z]).{8,30}$/;
+    return expression.test(password);
+  };
+
+  //test if passwords and confirm password are the same
+  const isSame = (password, confirmpass) => {
+    return confirmpass === password ? true : false;
+  };
+
+  function validateInput(inputName, e) {
+    setValues({ ...values, [inputName]: e.target.value });
+
+    if (inputName === "email") {
+      let email = e.target.value;
+      if (!isEmail(email)) {
+        // counter++;
+        setError("Email requires valid email format");
+        return;
+      } else if (email == "") {
+        setError("Email is required");
+        setValues({ ...values, [inputName]: e.target.value });
+      } else {
+        setError("");
+        setValues({ ...values, [inputName]: e.target.value });
+      }
+    }
+    if (inputName === "password") {
+      let password = e.target.value;
+      if (!isValidPW(password)) {
+        // counter++;
+        setError(
+          "Password must be alphanumeric , min of 8 up to 30 characters, and no spaces."
+        );
+        return;
+      } else if (password == "") {
+        setError("Password is required");
+        setValues({ ...values, [inputName]: e.target.value });
+      } else {
+        setError("");
+        setValues({ ...values, [inputName]: e.target.value });
+      }
+    }
+
+    if (inputName === "confirmPassword") {
+      let confirmPassword = e.target.value;
+      if (!isSame(password, confirmPassword)) {
+        // counter++;
+        setError("Confirm password must match the new password.");
+        return;
+      } else if (confirmPassword == "") {
+        setError("Confirm password is required");
+        return;
+      } else {
+        setError("");
+        setValues({ ...values, [inputName]: e.target.value });
+      }
+    }
+
+    if (inputName === "photo") {
+      let photo = e.target.value;
+      if (photo == "") {
+        //   counter++;
+        setError("Photo is required.");
+        return;
+      } else {
+        setError("");
+        setValues({ ...values, [inputName]: e.target.value });
+      }
+    }
+  }
+  //the number of cases must equal the number of fieds to validate, see validateInput function
+  const validateFields = (e) => {
+    for (let key in values) {
+      let name = key;
+      if (values[key] === "") {
+        switch (name) {
+          case "email":
+            name = "email.";
+            break;
+          case "password":
+            name = "password.";
+            break;
+          case "confirmPassword":
+            name = "confirmPassword.";
+            break;
+          case "photo":
+            name = "photo.";
+            break;
+          case "error":
+            continue;
+          case "formData":
+            continue;
+          default:
+            name = key;
+        }
+        setError(`You must provide ${name}`);
+        setValues({ ...values, [key]: values[key] });
+        return;
+      } else if (key === "email" && !isEmail(values[key])) {
+        setError("Invalid email, enter a valid email");
+        setValues({ ...values, [key]: values[key] });
+        return;
+      } else if (key === "password" && !isValidPW(values[key])) {
+        setError("Password is required");
+        setValues({ ...values, [key]: values[key] });
+        return;
+      } else if (
+        key === "confirmPassword" &&
+        !isSame(password, confirmPassword)
+      ) {
+        setError("Confirm password must match the password");
+        setValues({ ...values, [key]: values[key] });
+        return;
+      } else {
+        setError("");
+      }
+    }
+  };
+  //end of validation
+
   const clickSubmit = (event) => {
     event.preventDefault();
     setValues({ ...values, error: "", loading: true });
+    validateFields();
     register();
   };
 
@@ -115,7 +247,10 @@ const Register = (props) => {
           />
         </label>
       </div>
-      <button type="submit ">Create Account</button>
+      <button type="submit " className="mb-2">
+        Create Account
+      </button>
+      <p style={{ color: "red", fontWeight: "500" }}>{error}</p>
     </form>
   );
   return (

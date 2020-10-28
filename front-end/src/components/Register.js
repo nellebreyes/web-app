@@ -177,7 +177,7 @@ const Register = (props) => {
         setValues({ ...values, [key]: values[key] });
         return;
       } else if (key === "password" && !isValidPW(values[key])) {
-        setError("Password is required");
+        setError("Password is required and be in correct format");
         setValues({ ...values, [key]: values[key] });
         return;
       } else if (

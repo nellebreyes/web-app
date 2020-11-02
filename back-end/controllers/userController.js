@@ -66,29 +66,38 @@ exports.apiRegister = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
-    let user = new User({ err, fields, files });
-    try {
-      user
-        .register()
-        .then((result) => {
-          // console.log(result);
-          res.json({
-            token: jwt.sign(
-              { _id: user.data._id, email: user.data.email },
-              process.env.JWTSECRET,
-              { expiresIn: "365d" }
-            ),
-            email: user.data.email,
-            id: user.data.id,
-            message: "success",
+    //  console.log("fields", fields, "files", files);
+    if (
+      JSON.stringify(fields) == JSON.stringify({}) ||
+      JSON.stringify(files) == JSON.stringify({})
+    ) {
+      //console.log("all are required");
+      return res.json({ error: "All fields are required" });
+    } else {
+      let user = new User({ err, fields, files });
+      try {
+        user
+          .register()
+          .then((result) => {
+            // console.log(result);
+            res.json({
+              token: jwt.sign(
+                { _id: user.data._id, email: user.data.email },
+                process.env.JWTSECRET,
+                { expiresIn: "365d" }
+              ),
+              email: user.data.email,
+              id: user.data.id,
+              message: "success",
+            });
+          })
+          .catch((e) => {
+            return res.send("The email you entered is already on file.");
           });
-        })
-        .catch((e) => {
-          return res.status(400).send({ error: e });
-        });
-    } catch (e) {
-      //console.log(e);
-      return res.status(400).json({ error: e });
+      } catch (e) {
+        //console.log(e);
+        return res.status(400).json({ error: e });
+      }
     }
   });
 };
@@ -105,4 +114,45 @@ exports.profileBasicData = async (req, res) => {
     .catch((err) => {
       res.send(err);
     });
+};
+
+exports.profileUpdateBasicData = async (req, res) => {
+  //console.log("fromUserConrller", req.params);
+  let user = new User(req.params);
+
+  user
+    .getProfileById()
+    .then((userDoc) => {
+      res.send(userDoc);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+exports.apiProfileUpdateBasicData = (req, res) => {
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+    //console.log(err, fields, files);
+    console.log("param", req.params.id);
+    //console.log(req.email, "id", req.id);
+    let param = req.params.id;
+    let user = new User({ err, fields, files, param });
+
+    try {
+      user
+        .update()
+        .then((userDoc) => {
+          res.send(userDoc);
+          // console.log(userDoc);
+        })
+        .catch((err) => {
+          res.send(err);
+        });
+    } catch (e) {
+      //console.log(e);
+      return res.status(400).json({ error: e });
+    }
+  });
 };

@@ -9,6 +9,12 @@ router.post(
   userController.apiMustBeLoggedIn,
   userController.profileBasicData
 );
+
+router.post(
+  "/profile/:id/edit",
+  //userController.apiMustBeLoggedIn,
+  userController.apiProfileUpdateBasicData
+);
 router.post("/register", userController.apiRegister);
 router.post("/login", userController.apiLogin);
 

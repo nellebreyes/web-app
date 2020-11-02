@@ -1,5 +1,5 @@
 import Axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 
 const Register = (props) => {
@@ -9,15 +9,11 @@ const Register = (props) => {
     confirmPassword: "",
     photo: "",
     error: "",
-    formData: "",
+    formData: new FormData(),
   });
 
   //destructure to grab easily
-  const { email, password, confirmPassword, photo, formData } = values;
-
-  useEffect(() => {
-    setValues({ ...values, formData: new FormData() });
-  }, []);
+  const { password, confirmPassword, formData } = values;
 
   //high order function, function returning another function
   const handleChange = (name) => (event) => {
@@ -28,38 +24,25 @@ const Register = (props) => {
   };
 
   const register = async () => {
-    try {
-      const response = await Axios.post(
-        `${process.env.REACT_APP_API_URL}/register`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      //console.log(response.data.message);
-      if (response.data.message == "success" && response.data.token) {
-        setValues({
-          email: "",
-          password: "",
-          confirmPassword: "",
-          photo: "",
-          error: "",
-          loading: false,
-          formData: "",
-        });
-        alert(
-          "You have successfully registered, you will be redirected to the login page"
-        );
-        props.history.push(`/`);
+    const response = await Axios.post(
+      `${Axios.defaults.baseURL}/register`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }
-    } catch (e) {
-      if (e.response.data.error.length > 0) {
-        //   console.log(e.response.data.error);
-        //alert(e.response.data.error);
-      } else {
-        //    console.log("All fields are required", e.response.data.error);
+    );
+    // console.log(response.data);
+    if (response.data.message === "success" && response.data.token) {
+      alert(
+        "You have successfully registered, you will be redirected to the login page"
+      );
+      props.history.push(`/`);
+    } else {
+      console.log(response.data);
+      if (response.data === "The email you entered is already on file.") {
+        alert(response.data);
       }
     }
   };
@@ -80,10 +63,11 @@ const Register = (props) => {
   };
 
   //test if passwords and confirm password are the same
-  const isSame = (password, confirmpass) => {
-    return confirmpass === password ? true : false;
+  const isSame = (password, confirmpassword) => {
+    return confirmpassword === password ? true : false;
   };
 
+  //real time input validation
   function validateInput(inputName, e) {
     setValues({ ...values, [inputName]: e.target.value });
 
@@ -93,7 +77,7 @@ const Register = (props) => {
         counter++;
         setError("Email must be in valid format");
         return;
-      } else if (email == "") {
+      } else if (email === "") {
         setError("Email is required");
         setValues({ ...values, [inputName]: e.target.value });
       } else {
@@ -109,7 +93,7 @@ const Register = (props) => {
           "Password must be alphanumeric , min of 8 up to 30 characters."
         );
         return;
-      } else if (password == "") {
+      } else if (password === "") {
         setError("Password is required");
         setValues({ ...values, [inputName]: e.target.value });
       } else {
@@ -124,7 +108,7 @@ const Register = (props) => {
         counter++;
         setError("Confirm password and password must match");
         return;
-      } else if (confirmPassword == "") {
+      } else if (confirmPassword === "") {
         setError("Confirm password is required");
         return;
       } else {
@@ -135,7 +119,7 @@ const Register = (props) => {
 
     if (inputName === "photo") {
       let photo = e.target.value;
-      if (photo == "") {
+      if (photo === "") {
         counter++;
         setError("Photo is required.");
         return;
@@ -145,6 +129,7 @@ const Register = (props) => {
       }
     }
   }
+  //validate before submit
   //the number of cases must equal the number of fieds to validate, see validateInput function
   const validateFields = (e) => {
     for (let key in values) {
@@ -201,7 +186,7 @@ const Register = (props) => {
     event.preventDefault();
     setValues({ ...values, error: "", loading: true });
     validateFields();
-    if (counter != 0) {
+    if (counter !== 0) {
       register();
     }
   };

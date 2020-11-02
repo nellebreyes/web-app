@@ -7,6 +7,10 @@ import Register from "./Register";
 import ContextProvider from "../ContextProvider";
 import Page from "./Page";
 import Footer from "./Footer";
+import EditUserProfile from "./EditUserProfile";
+import Axios from "axios";
+Axios.defaults.baseURL =
+  process.env.REACT_APP_API_URL || "https://auth-webapp2.herokuapp.com/api";
 
 function App() {
   const [status, setStatus] = useState(
@@ -29,7 +33,9 @@ function App() {
                 <Home />
               </Route>
             )}
-
+            <Route exact path="/profile/:id/edit">
+              <EditUserProfile />
+            </Route>
             <Route exact path="/register" component={Register} />
             <Route
               render={() => (

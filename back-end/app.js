@@ -4,7 +4,6 @@ const { MongoClient } = require("mongodb");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require("path");
 require("dotenv").config();
 
 //db connect
@@ -32,23 +31,15 @@ main().catch(console.error);
 
 //middlewares
 app.use(morgan("dev"));
+
 //to be able to work with form data and json data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cors({ origin: true }));
 
 //user routes
 app.use("/api", require("./router"));
-
-//Serve static assets if in production
-if (process.env.NODE_ENV === "production") {
-  //Set static folder
-  app.use(express.static("client/built"));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
 
 module.exports = app;

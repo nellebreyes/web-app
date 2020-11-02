@@ -80,15 +80,31 @@ label {
   //all
   .container {
     width: 100%;
+
+    .profile-section {
+      padding: 0px !important;
+      h2 {
+        padding-top: 2rem;
+      }
+      .profilePhoto {
+        max-width: 70%;
+      }
+    }
+
+    .form-container {
+      width: 80% !important;
+      margin: 0 auto 2.5rem !important;
+
+      h2 {
+        margin-bottom: 0.7rem;
+        margin-top: 5rem;
+      }
+
+      h4 {
+        margin-top: 3rem;
+      }
+    }
   }
 
   //main content
-  .form-container {
-    width: 80% !important;
-    margin: 0 auto 2.5rem !important;
-
-    h2 {
-      margin-bottom: 0.7rem;
-    }
-  }
 }

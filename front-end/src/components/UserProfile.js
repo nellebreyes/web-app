@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import Axios from "axios";
+import ReactTooltip from "react-tooltip";
 
 function UserProfile() {
   const { id } = useParams();
@@ -9,12 +10,11 @@ function UserProfile() {
     photo: "",
   });
 
-  //only run this function the very first time the component is rendered
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await Axios.post(
-          `${process.env.REACT_APP_API_URL}/profile/${id}`,
+          `${Axios.defaults.baseURL}/profile/${id}`,
           { token: localStorage.getItem("webappv2Token") }
         );
 
@@ -28,16 +28,30 @@ function UserProfile() {
       }
     }
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <div className="profile-section">
       <h2>Profile Page</h2>
       <i className="fas fa-ellipsis-h fa-2x mb-2"></i>
       <div className="profilePhoto">
-        <img src={`data:image/jpeg;base64,${profileData.photo}`} />
+        <img
+          src={`data:image/jpeg;base64,${profileData.photo}`}
+          alt="profile"
+        />
       </div>
-      <p className="email">{profileData.email}</p>
+      <div className="editDiv">
+        <p className="email">{profileData.email}</p>
+        <NavLink
+          to={`/profile/${id}/edit`}
+          data-tip="Edit Photo"
+          data-for="edit"
+        >
+          <i className="fas fa-edit"></i>
+        </NavLink>
+        <ReactTooltip id="edit" />
+      </div>
+
       <div className="content">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

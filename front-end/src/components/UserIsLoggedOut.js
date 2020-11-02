@@ -15,14 +15,10 @@ function UserIsLoggedOut() {
         <div className="nav">
           <ul>
             <li>
-              <NavLink activeClassName="active" to="/">
-                Home
-              </NavLink>
+              <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink activeClassName="active" to="/register">
-                Register
-              </NavLink>
+              <NavLink to="/register">Register</NavLink>
             </li>
           </ul>
         </div>
